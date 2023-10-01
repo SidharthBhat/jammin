@@ -25,6 +25,8 @@ public class Patrol : MonoBehaviour
     private float stunTimer;
     private bool playerCollide = false;
 
+    [SerializeField] private GameObject GOUI;
+
     public Vector3 GetPosition()
     {
         return transform.position;
@@ -43,6 +45,8 @@ public class Patrol : MonoBehaviour
         fieldOfView.SetFOV(fov);
         fieldOfView.SetViewDist(viewDist);
         PatrolMove();
+        GOUI = GameObject.Find("Canvas");
+        GOUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -195,6 +199,8 @@ public class Patrol : MonoBehaviour
                                 //either they stop and look, then get back to it, or they just go to player and wait, and if player moves then they try to open the box, or they open the box anyways
                         }
                         */
+                        GOUI.SetActive(true);
+                        Time.timeScale = 0.0f;
                         return;
                     }
                 }
