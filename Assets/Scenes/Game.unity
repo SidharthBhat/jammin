@@ -461,6 +461,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pfFov: {fileID: 7478956783212785161, guid: 7d906f5e275b31b48b3caa3747cf79cd, type: 3}
+  fov: 90
+  viewDist: 10
   patrolPoints:
   - {fileID: 638792734}
   - {fileID: 683087787}
