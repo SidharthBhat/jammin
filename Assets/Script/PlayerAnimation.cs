@@ -7,6 +7,7 @@ public class PlayerAnimation : MonoBehaviour
     private PlayerMovementScript PMS;
     private Animator anim;
     private SpriteRenderer sprite;
+    [SerializeField] private SpriteRenderer BoxSprite;
 
     private static readonly int Idle = Animator.StringToHash("kid_idle");
     private static readonly int Walk = Animator.StringToHash("kid_walk");
@@ -29,10 +30,12 @@ public class PlayerAnimation : MonoBehaviour
         if (pdata.HorizontalFacing)
         {
             sprite.flipX = false;
+            BoxSprite.flipX = false;
         }
         else
         {
             sprite.flipX = true;
+            BoxSprite.flipX = true;
         }
 
         if (pdata.Moving)
@@ -42,6 +45,16 @@ public class PlayerAnimation : MonoBehaviour
         else
         {
             anim.CrossFade(Idle, 0f);
+        }
+
+        if (pdata.InBox)
+        {
+            BoxSprite.gameObject.SetActive(true);
+        }
+        else
+        {
+            BoxSprite.gameObject.SetActive(false);
+
         }
     }
 }

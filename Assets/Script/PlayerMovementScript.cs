@@ -21,6 +21,19 @@ public class PlayerMovementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            switch (playerData.InBox)
+            {
+                case true:
+                    playerData.InBox = false;
+                    break;
+
+                case false:
+                    playerData.InBox = true;
+                    break;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -36,9 +49,14 @@ public class PlayerMovementScript : MonoBehaviour
         {
             playerData.HorizontalFacing = false;
         }
+        float boxmulti = 1;
+        if (playerData.InBox)
+        {
+            boxmulti = 0.5f;
+        }
 
-        float xDist = horizontalAxis * SPEED * Time.deltaTime;
-        float yDist = verticalAxis * SPEED * Time.deltaTime;
+        float xDist = horizontalAxis * SPEED * Time.deltaTime * boxmulti;
+        float yDist = verticalAxis * SPEED * Time.deltaTime * boxmulti;
 
         Vector2 deltaPosition = new Vector2(xDist, yDist);
 
@@ -59,4 +77,5 @@ public struct PlayerData
     public bool HorizontalFacing;
     public bool VerticalFacing;
     public bool Moving;
+    public bool InBox;
 }
