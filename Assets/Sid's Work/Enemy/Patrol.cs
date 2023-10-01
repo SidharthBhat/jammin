@@ -195,6 +195,7 @@ public class Patrol : MonoBehaviour
                                 //either they stop and look, then get back to it, or they just go to player and wait, and if player moves then they try to open the box, or they open the box anyways
                         }
                         */
+                        return;
                     }
                 }
             }

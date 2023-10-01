@@ -54,7 +54,7 @@ public class MainMenu : MonoBehaviour
             yield return null;
         }
 
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("GameWithTiles");
         yield return null;
     }
 }
