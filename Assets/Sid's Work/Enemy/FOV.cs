@@ -14,13 +14,13 @@ public class FOV : MonoBehaviour
     Mesh mesh;
 
     
-    public Vector3 Angle2Vector(float angle)
+    public static Vector3 Angle2Vector(float angle)
     {
         float radians = angle * (Mathf.PI / 180f);
         return new Vector3(Mathf.Cos(radians), Mathf.Sin(radians));
     }
 
-    public float Vector2Angle(Vector3 v)
+    public static float Vector2Angle(Vector3 v)
     {
         v = v.normalized;
         float n = Mathf.Atan2(v.y, v.x)*Mathf.Rad2Deg;
@@ -31,7 +31,14 @@ public class FOV : MonoBehaviour
     public void SetOrigin(Vector3 origin) { this.origin = origin; }
 
     //sets FOV to face given direction (in radians)
-    public void SetDirection(Vector3 direction) { startAngle = Vector2Angle(direction) - fov*1.5f; }
+    public void SetDirection(Vector3 direction)
+    { 
+        startAngle = Vector2Angle(direction) + fov/2 - 180;
+        if (startAngle < 0)
+        {
+            startAngle += 360;
+        }
+    }
 
     public void SetFOV(float fov)
     {

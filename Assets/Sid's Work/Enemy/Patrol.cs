@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,9 +8,16 @@ public class Patrol : MonoBehaviour
     //NOTE: can't seem to get the angle to line up properly, possible points of failure are Vector2Angle in FOV, setDirection in FOV, and vector inputted in this class
     private FOV fieldOfView;
     [SerializeField] private Transform pfFov;
+
+    //debug, delete after
+    [SerializeField] private Vector3 testDirec = Vector3.zero;
+    [SerializeField] private float testDist = 0;
+    [SerializeField] private float testAng = 0;
+
     public float fov;
     public float viewDist;
     public float waitTime = 1f;
+    public LayerMask playerLayer;
 
     public Transform[] patrolPoints;
     private int currentPoint;
@@ -72,7 +80,7 @@ public class Patrol : MonoBehaviour
         {
             if (GetPosition() != patrolPoints[currentPoint].position)
             {
-                direction = GetPosition() - patrolPoints[currentPoint].position;
+                direction = (GetPosition() - patrolPoints[currentPoint].position).normalized;
                 SetPosition(Vector3.MoveTowards(transform.position, patrolPoints[currentPoint].position, speed * Time.deltaTime));
                 state = 1;
             }
@@ -94,19 +102,25 @@ public class Patrol : MonoBehaviour
     {
         //PatrolMove();
         //swap out out for player position function
+        testDist = Vector3.Distance(GetPosition(), player.transform.position);
         if (Vector3.Distance(GetPosition(), player.transform.position) < viewDist)
         {
             //swap out for player position function
             Vector3 playerDirection = (player.transform.position - GetPosition()).normalized;
-            if(Vector3.Angle(direction, playerDirection) < fov / 2f)
+            testDirec = playerDirection;
+            testAng = Vector3.Angle(direction, playerDirection) -180 + fov/2;
+            if(testAng < 0)
             {
-                RaycastHit2D detect = Physics2D.Raycast(GetPosition(), playerDirection, viewDist);
-                if(detect != null)
+                testAng += 360;
+            }
+            if (testAng < fov / 2f)
+            {
+                RaycastHit2D detect = Physics2D.Raycast(GetPosition(), playerDirection, viewDist, playerLayer);
+                if(detect.collider != null)
                 {
-                    /*
-                    //uncomment when player is added
-                    if(detect.collider.gameObject.GetComponent<Player>() != null)
+                    if (detect.collider.gameObject.tag.Equals("Player"))
                     {
+                        /*
                         //state hasn't been added yet, so this can change
                         //if we use two bools, one for move and one for box, i'll change this to if-else
                         //currently running of assumed values, being:
@@ -124,10 +138,9 @@ public class Patrol : MonoBehaviour
                                 //either they stop and look, then get back to it, or they just go to player and wait, and if player moves then they try to open the box, or they open the box anyways
                                 break
                         }
+                        */
+                        return;
                     }
-                    */
-                    //remove this once detect code is implemented
-                    return;
                 }
             }
         }
