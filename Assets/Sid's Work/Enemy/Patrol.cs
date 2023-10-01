@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Patrol : MonoBehaviour
 {
+    //NOTE: can't seem to get the angle to line up properly, possible points of failure are Vector2Angle in FOV, setDirection in FOV, and vector inputted in this class
+    private FOV fieldOfView;
+    [SerializeField] private Transform pfFov;
+    public float fov;
+    public float viewDist;
 
-    [SerializeField] private FOV fov;
     public Transform[] patrolPoints;
     private int currentPoint;
     public float speed;
@@ -14,20 +18,34 @@ public class Patrol : MonoBehaviour
     private int state;
     private Vector3 direction;
 
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
+
+    private void SetPosition(Vector3 position)
+    {
+        transform.position = position;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         currentPoint = 0;
+        fieldOfView=Instantiate(pfFov, null).GetComponent<FOV>();
+        fieldOfView.SetFOV(fov);
+        fieldOfView.SetViewDist(viewDist);
     }
 
     // Update is called once per frame
     void Update()
     {
         //add detect code here, if nothing patrol, otherwise activate game over. if distraction, do that
-        patrol();
+        PatrolMove();
+        DetectPlayer();
     }
-
-    private void patrol()
+    
+    private void PatrolMove()
     {
         if (waitTime >= 0)
         {
@@ -35,10 +53,10 @@ public class Patrol : MonoBehaviour
         }
         else
         {
-            if (transform.position != patrolPoints[currentPoint].position)
+            if (GetPosition() != patrolPoints[currentPoint].position)
             {
-                direction = transform.position - patrolPoints[currentPoint].position;
-                transform.position = Vector3.MoveTowards(transform.position, patrolPoints[currentPoint].position, speed * Time.deltaTime);
+                direction = GetPosition() - patrolPoints[currentPoint].position;
+                SetPosition(Vector3.MoveTowards(transform.position, patrolPoints[currentPoint].position, speed * Time.deltaTime));
                 state = 1;
             }
             else
@@ -50,8 +68,30 @@ public class Patrol : MonoBehaviour
         }
         if (state == 1)
         {
-            fov.setOrigin(transform.position);
-            fov.setDirection(direction);
+            fieldOfView.SetOrigin(GetPosition());
+            fieldOfView.SetDirection(direction);
+        }
+    }
+
+    private void DetectPlayer()
+    {
+        //swap out zero for player position
+        if (Vector3.Distance(GetPosition(), Vector3.zero) < viewDist)
+        {
+            //swap zero for player position
+            Vector3 playerDirection = (Vector3.zero - GetPosition()).normalized;
+            if(Vector3.Angle(direction, playerDirection) < fov / 2f)
+            {
+                RaycastHit2D detect = Physics2D.Raycast(GetPosition(), playerDirection, viewDist);
+                if(detect != null)
+                {
+                    //uncomment when player is added
+                    //if(detect.collider.gameObject.GetComponent<Player>() != null)
+                    //{
+                        //check detect states here
+                    //}
+                }
+            }
         }
     }
 }

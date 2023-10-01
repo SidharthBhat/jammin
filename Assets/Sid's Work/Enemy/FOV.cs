@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FOV : MonoBehaviour
 {
-    //NOTE: has a weird issue where moving the FOV test object messed up raycasting, not sure why, it also happens that the empty just gets displaced (5,5) for no apparent reason. if it doesn't fix itself when applied to enemy, gotta debug it
+
     public LayerMask obstructionLayer;
     public float fov;
     public int rayCount;
@@ -28,10 +28,20 @@ public class FOV : MonoBehaviour
         return n;
     }
 
-    public void setOrigin(Vector3 origin) { this.origin = origin; }
+    public void SetOrigin(Vector3 origin) { this.origin = origin; }
 
     //sets FOV to face given direction (in radians)
-    public void setDirection(Vector3 direction) { startAngle = Vector2Angle(direction) - 90 - fov/2; }
+    public void SetDirection(Vector3 direction) { startAngle = Vector2Angle(direction) - fov*1.5f; }
+
+    public void SetFOV(float fov)
+    {
+        this.fov = fov;
+    }
+
+    public void SetViewDist(float viewDist)
+    {
+        this.viewDist = viewDist;
+    }
 
     void Start()
     {
