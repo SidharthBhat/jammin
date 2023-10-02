@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Patrol : MonoBehaviour
@@ -24,6 +25,7 @@ public class Patrol : MonoBehaviour
     public float stunTime;
     private float stunTimer;
     private bool playerCollide = false;
+    private bool StunSetting = false;
 
     [SerializeField] private GameObject GOUI;
 
@@ -52,14 +54,13 @@ public class Patrol : MonoBehaviour
         fieldOfView.SetFOV(fov);
         fieldOfView.SetViewDist(viewDist);
         PatrolMove();
-        GOUI = GameObject.Find("Canvas");
         GOUI.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (StunSetting== false) {
         //swap false with stun condition
         switch (state)
         {
@@ -77,14 +78,12 @@ public class Patrol : MonoBehaviour
             case 4:
                 BoxApproach();
                 break;
-            case 5:
-                BoxReveal();
-                break;
             case 6:
                 Stun();
                 break;
             default:
                 break;
+        }
         }
     }
 
@@ -107,6 +106,7 @@ public class Patrol : MonoBehaviour
 
     private void Stunned()
     {
+        Debug.Log("bingus");
         if(stunTimer > 0)
         {
             stunTimer -= Time.deltaTime;
@@ -122,10 +122,21 @@ public class Patrol : MonoBehaviour
 
     public void Stun()
     {
-        state = 3;
-        stunTimer = stunTime;
+        //state = 3;
+        //stunTimer = stunTime;
+        StartCoroutine(StunLock()); 
         return;
     }
+
+    IEnumerator StunLock()
+    {
+        Debug.Log("its not a tumor");
+        StunSetting = true;
+        yield return new WaitForSeconds(stunTime);
+        Debug.Log("ok its a tumor");
+        StunSetting = false;
+    }
+
 
     public void BoxApproach()
     {
@@ -134,17 +145,13 @@ public class Patrol : MonoBehaviour
         SetPosition(Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime));
         fieldOfView.SetOrigin(GetPosition());
         fieldOfView.SetDirection(direction);
-        if(playerCollide)
+        if(Vector2.Distance(player.transform.position, transform.position) < 0.1)
         {
             state = 5;
             return;
         }
     }
 
-    public void BoxReveal()
-    {
-        //TODO
-    }
     
     private void PatrolMove()
     {
@@ -201,11 +208,7 @@ public class Patrol : MonoBehaviour
                         {
                             if(playerState.Moving)
                             {
-                                state = 4;
-                                return;
-                            }
-                            else
-                            {
+                                state = 2;
                                 return;
                             }
                         }

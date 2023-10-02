@@ -13,7 +13,6 @@ public class Monkey : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(Throw());
     }
 
     // Update is called once per frame
@@ -24,6 +23,7 @@ public class Monkey : MonoBehaviour
 
     IEnumerator Throw()
     {
+        
         float ThrowDistance = Vector2.Distance(Startpos, Endpos);
         while (Vector2.Distance(this.gameObject.transform.position,Endpos) > 0.01)
         {
@@ -34,16 +34,25 @@ public class Monkey : MonoBehaviour
         }
     }
 
+    public void ThrowStart()
+    {
+
+        StartCoroutine(Throw());
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        collision.GetComponent<Patrol>().enabled = false;
-
-        Destroy(this.gameObject);
+        //collision.GetComponent<Patrol>().enabled = false;
+        if(collision.GetComponent<Patrol>() != null) { 
+            collision.GetComponent<Patrol>().Stun();
+            Destroy(this.gameObject);
+        }
     }
 
     public void setPos(Vector2 start, Vector2 end)
     {
         Startpos = start;
+        this.gameObject.transform.position = start;
         Endpos = end;
     }
 }

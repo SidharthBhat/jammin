@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovementScript : MonoBehaviour
@@ -45,8 +46,9 @@ public class PlayerMovementScript : MonoBehaviour
     private void LeMonke()
     {
         Vector2 mousePos = Input.mousePosition;
-        monky.GetComponent<Monkey>().setPos(transform.position, Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y)));
-        Instantiate(monky);
+        Object gm = Instantiate(monky);
+        gm.GetComponent<Monkey>().setPos(this.transform.position, Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y)));
+        gm.GetComponent<Monkey>().ThrowStart();
     }
 
     void FixedUpdate()
