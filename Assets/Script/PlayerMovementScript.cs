@@ -10,6 +10,8 @@ public class PlayerMovementScript : MonoBehaviour
     public float SPEED = 20.0f;
     public bool moving = false;
     private Rigidbody2D rb;
+    public Transform monky;
+
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +36,17 @@ public class PlayerMovementScript : MonoBehaviour
                     break;
             }
         }
+        else if (Input.GetButtonDown("Fire2"))
+        {
+            LeMonke();
+        }
+    }
+
+    private void LeMonke()
+    {
+        Vector2 mousePos = Input.mousePosition;
+        monky.GetComponent<Monkey>().setPos(transform.position, Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y)));
+        Instantiate(monky);
     }
 
     void FixedUpdate()

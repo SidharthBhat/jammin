@@ -33,4 +33,17 @@ public class Monkey : MonoBehaviour
             yield return null;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        collision.GetComponent<Patrol>().enabled = false;
+
+        Destroy(this.gameObject);
+    }
+
+    public void setPos(Vector2 start, Vector2 end)
+    {
+        Startpos = start;
+        Endpos = end;
+    }
 }

@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SPEED: 3.46
   moving: 0
+  monky: {fileID: 2373464998516625174, guid: 78be10c2b2cd88b4fbbf6803d5e99169, type: 3}
 --- !u!50 &8941202289179240092
 Rigidbody2D:
   serializedVersion: 4

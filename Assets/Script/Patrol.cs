@@ -37,6 +37,13 @@ public class Patrol : MonoBehaviour
         transform.position = position;
     }
 
+    public void SetState(int state)
+    {
+        Debug.Log("Eef Freef");
+        this.state = state;
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,8 +68,9 @@ public class Patrol : MonoBehaviour
                 DetectPlayer();
                 break;
             case 2:
-                //gameover
-                break;
+                GOUI.SetActive(true);
+                Time.timeScale = 0.0f;
+                return;
             case 3:
                 Stunned();
                 break;
@@ -71,6 +79,9 @@ public class Patrol : MonoBehaviour
                 break;
             case 5:
                 BoxReveal();
+                break;
+            case 6:
+                Stun();
                 break;
             default:
                 break;
@@ -82,6 +93,10 @@ public class Patrol : MonoBehaviour
         if (collision.collider.gameObject.tag.Equals("Player"))
         {
             playerCollide = true;
+        }
+        else if (collision.collider.gameObject.tag.Equals("Monkey"))
+        {
+            Stun();
         }
     }
 
@@ -114,6 +129,7 @@ public class Patrol : MonoBehaviour
 
     public void BoxApproach()
     {
+        //excalamation on top of head???
         direction = (GetPosition() - player.transform.position).normalized;
         SetPosition(Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime));
         fieldOfView.SetOrigin(GetPosition());
@@ -160,11 +176,8 @@ public class Patrol : MonoBehaviour
 
     private void DetectPlayer()
     {
-        //PatrolMove();
-        //swap out out for player position function
         if (Vector3.Distance(GetPosition(), player.transform.position) < viewDist)
         {
-            //swap out for player position function
             Vector3 playerDirection = (player.transform.position - GetPosition()).normalized;
             float angle = Vector3.Angle(direction, playerDirection) -180 + fov/2;
             if(angle < 0)
@@ -178,30 +191,24 @@ public class Patrol : MonoBehaviour
                 {
                     if (detect.collider.gameObject.tag.Equals("Player"))
                     {
-                        /*
-                        //state hasn't been added yet, so this can change
-                        //if we use two bools, one for move and one for box, i'll change this to if-else
-                        //currently running of assumed values, being:
-                        //0 default, 1 box, 2 boxmove
-                        int state = player.GetState();
-                        switch(state)
+                        PlayerData playerState = player.GetComponent<PlayerMovementScript>().GetData();
+                        if(!playerState.InBox)
                         {
-                            case 0:
-                                state=2;
-                                return;
-                            case 1:
-                                //add that if box collides with enemy, set to state 5 
-                                return;
-                            case 2:
-                                //box suspicion
-                                state=4;
-                                return;
-                                //either they stop and look, then get back to it, or they just go to player and wait, and if player moves then they try to open the box, or they open the box anyways
+                            state = 2;
+                            return;
                         }
-                        */
-                        GOUI.SetActive(true);
-                        Time.timeScale = 0.0f;
-                        return;
+                        else
+                        {
+                            if(playerState.Moving)
+                            {
+                                state = 4;
+                                return;
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
                     }
                 }
             }

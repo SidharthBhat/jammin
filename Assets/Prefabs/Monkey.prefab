@@ -178,10 +178,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2373464998516625174}
   - component: {fileID: 2373464998516625169}
-  - component: {fileID: 7219446996346368431}
+  - component: {fileID: -5439165028020198701}
   m_Layer: 0
   m_Name: Monkey
-  m_TagString: Untagged
+  m_TagString: Monkey
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -215,13 +215,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a3393206cb11a448e0b95e1c1b4560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Startpos: {x: 0, y: 0}
-  Endpos: {x: 0, y: 0}
+  Startpos: {x: -1.2363954, y: -2.64}
+  Endpos: {x: 6.996199, y: -4.5707116}
   ThrowSpeed: 9
   ArcHeight: 0.96
   Sprite: {fileID: 2373464998168237034}
---- !u!70 &7219446996346368431
-CapsuleCollider2D:
+--- !u!61 &-5439165028020198701
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -230,9 +230,19 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.03}
-  m_Size: {x: 0.55, y: 0.27}
-  m_Direction: 1
+  m_Offset: {x: -0.0028116703, y: 0.1883719}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.49392653, y: 0.49392653}
+  m_EdgeRadius: 0
