@@ -402,7 +402,10 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Arrows/WASD-Move
 
-'
+    Left Click - Hide in Box
+
+    Right Click - Throw
+    Distraction Monkey'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: da8cd46ef7dec674fb47e769273981df, type: 2}
   m_sharedMaterial: {fileID: 5446407105911427423, guid: da8cd46ef7dec674fb47e769273981df, type: 2}
